@@ -7,7 +7,7 @@ const port = 3000;
 app.use('/api', routes);
 
 app.get('/', (_, res) => {
-  res.status(200).json({ hello: 'world' });
+  res.status(200).send('Server is working!');
 });
 
 app.listen(port, () => console.log(`Running on port ${port}`));

@@ -1,11 +1,12 @@
 import express from 'express';
 import fs from 'fs/promises';
 import path from 'path';
-import sharp from 'sharp';
-import expressLogger from '../../helpers/expressLogger';
+import sizeOf from 'image-size';
+import imageHelper from '../../helpers/imageHelper';
+import { Stats } from 'fs';
+import { ISizeCalculationResult } from 'image-size/dist/types/interface';
 
 const imageRouter = express.Router();
-imageRouter.use(expressLogger);
 
 imageRouter.get('/', async (req, res) => {
   const filename = req.query.filename;
@@ -17,18 +18,10 @@ imageRouter.get('/', async (req, res) => {
     : null;
 
   // check if the query is correct
-  if (!filename) {
-    res.status(400).send('Filename is missing in url params');
-    return;
-  }
-
-  if (!height) {
-    res.status(400).send('Height is missing in url params');
-    return;
-  }
-
-  if (!width) {
-    res.status(400).send('Width is missing in url params');
+  if (!filename || !height || !width) {
+    res
+      .status(400)
+      .send('Please make sure url contains filename, height and width params');
     return;
   }
 
@@ -44,25 +37,54 @@ imageRouter.get('/', async (req, res) => {
   )}`;
 
   // Check if filename exists in full folder
-  await fs.stat(filePathFullImage).catch((e) => res.status(404).send(e));
+  const fullImage: Stats | null = await fs.stat(filePathFullImage).catch(() => {
+    res.status(404).send('Image does not exist');
+    return null;
+  });
+
+  if (!fullImage) {
+    return;
+  }
 
   // Check if thumb was already created
-  await fs.stat(filePathThumbImage).catch((e) => console.log(e));
-
-  const data = await fs.readFile(filePathFullImage);
-
-  // resize image
-  sharp(data)
-    .resize(width, height)
-    .toFile(filePathThumbImage, async (err, info) => {
-      // Check if thumb was created
-      await fs.stat(filePathThumbImage).catch((e) => res.status(500).send(e));
-
-      const thumbData = await fs.readFile(filePathThumbImage);
-
-      // Setting the headers
-      res.status(200).contentType('jpg').send(thumbData);
+  const existingThumb: Stats | null = await fs
+    .stat(filePathThumbImage)
+    .catch(() => {
+      return null;
     });
+  const dimensions: ISizeCalculationResult | null = existingThumb
+    ? sizeOf(filePathThumbImage)
+    : null;
+
+  if (
+    existingThumb &&
+    dimensions &&
+    dimensions.height === height &&
+    dimensions.width === width
+  ) {
+    fs.readFile(filePathThumbImage)
+      .then((thumbData) => {
+        res.status(200).contentType('jpg').send(thumbData);
+      })
+      .catch(() => {
+        res.status(500).send('Error occured processing the image');
+      });
+  } else {
+    // resize image
+    imageHelper
+      .resizeImage({
+        filePathFullImage,
+        filePathThumbImage,
+        height,
+        width,
+      })
+      .then((resizedImage: Buffer) => {
+        res.status(200).contentType('jpg').send(resizedImage);
+      })
+      .catch(() => {
+        res.status(500).send('Error occured processing the image');
+      });
+  }
 });
 
 export default imageRouter;
