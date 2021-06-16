@@ -19,9 +19,37 @@ It is an express server which is able to take images located in a folder and cre
 | `height`   | `number` | **Required**. desired height                              |
 | `width`    | `number` | **Required**. desired width                               |
 
+### Functionality
+
 - This will create a thumb version of the image (if it does not exist already)
+- If you change the height or width parameter it will recreate the image
 - Futhermore it will be delivered as the response to the client
 
+## Scripts
+
+Run tests
+
+```bash
+  npm run test
+```
+
+Start the dev server
+
+```bash
+  npm run dev
+```
+
+Build the project
+
+```bash
+  npm run build
+```
+
+Run the application
+
+```bash
+  npm run start
+```
   
 ## Run Locally
 
