@@ -1,4 +1,3 @@
-
 # Image processing API
 
 This project is part of the Udacity Full-Stack Javascript Nanodegree
@@ -11,7 +10,7 @@ It is an express server which is able to take images located in a folder and cre
 #### Create thumb version of image
 
 ```http
-  GET /api/images/?{filename}&height={height}&width={width}
+  GET /api/images/?filename={filename}&height={height}&width={width}
 ```
 
 | Parameter  | Type     | Description                                               |
