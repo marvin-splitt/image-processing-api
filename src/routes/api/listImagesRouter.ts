@@ -18,7 +18,7 @@ listImagesRouter.get('/', async (req: Request, res: Response): Promise<void> => 
 
     let htmlResponse = `
         <h1>Available images</h1>
-        <p>Below you find all images which are accessable through the /api/images route</p>
+        <p>Below you can find all images that are accessible via the route /api/images</p>
         <ul>
     `;
 
