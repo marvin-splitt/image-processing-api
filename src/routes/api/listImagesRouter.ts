@@ -1,0 +1,32 @@
+import express, { Response, Request } from 'express';
+import fs from 'fs/promises';
+import path from 'path';
+
+const listImagesRouter = express.Router();
+
+listImagesRouter.get('/', async (req: Request, res: Response): Promise<void> => {
+    const folderPathFullImage = `${path.resolve(__dirname, '../../../assets/full')}`;
+
+    const files: string[] | null = await fs.readdir(folderPathFullImage).catch(() => {
+        res.status(500).send('Error occured reading the images');
+        return null;
+    });
+
+    if (!files) {
+        return;
+    }
+
+    let htmlResponse = `
+        <h1>Available images</h1>
+        <p>Below you find all images which are accessable through the /api/images route</p>
+        <ul>
+    `;
+
+    files.forEach((file: string) => {
+        htmlResponse = htmlResponse + `<li>${file}</li>`;
+    });
+
+    res.status(200).send(`${htmlResponse}</ul>`);
+});
+
+export default listImagesRouter;

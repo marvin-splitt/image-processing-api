@@ -9,18 +9,18 @@ const port = 3000;
 app.use('/api', routes);
 
 app.get('/', (_, res) => {
-  res.status(200).send('Server is working!');
+    res.status(200).send('Server is working!');
 });
 
 app.listen(port, () => {
-  // make sure thumb folder exists
-  const thumbPath = path.resolve(__dirname, '../assets/thumb');
+    // make sure thumb folder exists
+    const thumbPath = path.resolve(__dirname, '../assets/thumb');
 
-  if (!fs.existsSync(thumbPath)) {
-    fs.mkdirSync(thumbPath);
-  }
+    if (!fs.existsSync(thumbPath)) {
+        fs.mkdirSync(thumbPath);
+    }
 
-  console.log(`Running on port ${port}`);
+    console.log(`Running on port ${port}`);
 });
 
 export default app;
