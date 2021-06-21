@@ -40,7 +40,7 @@ imageRouter.get('/', async (req: Request, res: Response): Promise<void> => {
 
     if (existingThumb) {
         fs.readFile(filePathThumbImage)
-            .then((thumbData) => {
+            .then((thumbData: Buffer) => {
                 res.status(200).contentType('jpg').send(thumbData);
             })
             .catch(() => {

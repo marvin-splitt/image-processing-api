@@ -6,7 +6,7 @@ const filePathThumbImage = path.resolve(__dirname, '../../../assets/thumb/fjord.
 
 describe('The imageResizer function', () => {
     it('returns a buffer after sucessfully resizing an image', async () => {
-        const imageBuffer = await imageHelper.resizeImage({
+        const imageBuffer: Buffer = await imageHelper.resizeImage({
             height: 100,
             width: 150,
             filePathFullImage,

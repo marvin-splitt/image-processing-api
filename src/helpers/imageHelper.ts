@@ -16,7 +16,7 @@ const resizeImage = async ({
     filePathFullImage,
     filePathThumbImage,
 }: ResizeImageProps): Promise<Buffer> => {
-    const data = await fs.readFile(filePathFullImage).catch(() => null);
+    const data: Buffer | null = await fs.readFile(filePathFullImage).catch(() => null);
 
     if (!data) {
         return Promise.reject();
