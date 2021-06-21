@@ -1,8 +1,8 @@
 import { DisplayProcessor, SpecReporter, StacktraceOption } from 'jasmine-spec-reporter';
-import SuiteInfo = jasmine.SuiteInfo;
+import SuiteInfo = jasmine.JasmineStartedInfo;
 
 class CustomProcessor extends DisplayProcessor {
-    public override displayJasmineStarted(info: SuiteInfo, log: string): string {
+    public override displayJasmineStarted(_info: SuiteInfo, log: string): string {
         return `TypeScript ${log}`;
     }
 }

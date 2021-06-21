@@ -22,7 +22,7 @@ const resizeImage = async ({
         return Promise.reject();
     }
 
-    const imageBuffer = await sharp(data)
+    const imageBuffer: Buffer | null = await sharp(data)
         .resize(width, height)
         .toBuffer()
         .catch(() => null);

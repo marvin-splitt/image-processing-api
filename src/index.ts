@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Response } from 'express';
 import fs from 'fs';
 import path from 'path';
 import routes from './routes/index';
@@ -8,11 +8,11 @@ const port = 3000;
 
 app.use('/api', routes);
 
-app.get('/', (_, res) => {
+app.get('/', (_, res: Response): void => {
     res.status(200).send('Server is working!');
 });
 
-app.listen(port, () => {
+app.listen(port, (): void => {
     // make sure thumb folder exists
     const thumbPath = path.resolve(__dirname, '../assets/thumb');
 

@@ -4,7 +4,7 @@ import path from 'path';
 
 const listImagesRouter = express.Router();
 
-listImagesRouter.get('/', async (req: Request, res: Response): Promise<void> => {
+listImagesRouter.get('/', async (_req: Request, res: Response): Promise<void> => {
     const folderPathFullImage = `${path.resolve(__dirname, '../../../assets/full')}`;
 
     const files: string[] | null = await fs.readdir(folderPathFullImage).catch(() => {
@@ -22,7 +22,7 @@ listImagesRouter.get('/', async (req: Request, res: Response): Promise<void> => 
         <ul>
     `;
 
-    files.forEach((file: string) => {
+    files.forEach((file: string): void => {
         htmlResponse = htmlResponse + `<li>${file}</li>`;
     });
 
